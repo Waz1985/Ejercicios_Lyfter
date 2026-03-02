@@ -1,0 +1,68 @@
+[
+    {
+        "id": 1,
+        "titulo": "Configurar entorno Flask",
+        "descripcion": "Crear entorno virtual e instalar Flask y dependencias necesarias.",
+        "estado": "Completada"
+    },
+    {
+        "id": 2,
+        "titulo": "Diseñar modelo de tareas",
+        "descripcion": "Definir estructura de datos para representar una tarea.",
+        "estado": "Completada"
+    },
+    {
+        "id": 3,
+        "titulo": "Crear endpoint GET /tasks",
+        "descripcion": "Implementar endpoint para obtener la lista completa de tareas.",
+        "estado": "En Progreso"
+    },
+    {
+        "id": 4,
+        "titulo": "Crear endpoint POST /tasks (actualizado)",
+        "descripcion": "Permitir la creación de nuevas tareas mediante JSON.",
+        "estado": "En Progreso"
+    },
+    {
+        "id": 5,
+        "titulo": "Validar datos de entrada",
+        "descripcion": "Validar que título y estado sean obligatorios.",
+        "estado": "Por Hacer"
+    },
+    {
+        "id": 6,
+        "titulo": "Implementar filtrado por estado",
+        "descripcion": "Permitir consultar tareas por estado usando query params.",
+        "estado": "En Progreso"
+    },
+    {
+        "id": 7,
+        "titulo": "Conectar con base de datos",
+        "descripcion": "Integrar MySQL para persistencia de tareas.",
+        "estado": "Por Hacer"
+    },
+    {
+        "id": 8,
+        "titulo": "Implementar PUT /tasks/<id>",
+        "descripcion": "Permitir actualizar una tarea existente.",
+        "estado": "Por Hacer"
+    },
+    {
+        "id": 9,
+        "titulo": "Implementar DELETE /tasks/<id>",
+        "descripcion": "Permitir eliminar una tarea.",
+        "estado": "Por Hacer"
+    },
+    {
+        "id": 10,
+        "titulo": "Escribir pruebas unitarias",
+        "descripcion": "Crear pruebas usando pytest para los endpoints.",
+        "estado": "Por Hacer"
+    },
+    {
+        "id": 11,
+        "titulo": "Comprar leche",
+        "descripcion": "Ir al súper y comprar leche deslactosada",
+        "estado": "Por Hacer"
+    }
+]
