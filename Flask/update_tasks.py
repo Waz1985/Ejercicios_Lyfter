@@ -1,36 +1,36 @@
 from flask import request, jsonify
-from utils import leer_tareas, es_vacio, VALID_STATES, guardar_tareas 
+from utils import read_tasks, is_empty, VALID_STATES, save_tasks 
 
-def update_task(tarea_id):
-    tareas = leer_tareas()
+def update_task(task_id):
+    tasks = read_tasks()
     data = request.get_json(silent=True) or {}
 
-    tarea = next((t for t in tareas if t.get("id") == tarea_id), None)
-    if not tarea:
-        return jsonify({"error": "Tarea no encontrada."}), 404
+    task = next((t for t in tasks if t.get("id") == task_id), None)
+    if not task:
+        return jsonify({"error": "Task not found."}), 404
 
-    if "id" in data and data["id"] != tarea_id:
-        return jsonify({"error": "No se permite cambiar el id de la tarea."}), 400
+    if "id" in data and data["id"] != task_id:
+        return jsonify({"error": "You can't change the task id."}), 400
 
-    if "estado" in data:
-        if es_vacio(data.get("estado")):
-            return jsonify({"error": "El campo 'estado' no puede estar vacío."}), 400
-        if data["estado"] not in VALID_STATES:
-            return jsonify({"error": "Estado inválido."}), 400
+    if "state" in data:
+        if is_empty(data.get("state")):
+            return jsonify({"error": "Field 'state' can't be empty."}), 400
+        if data["state"] not in VALID_STATES:
+            return jsonify({"error": "Invalid state."}), 400
 
-    if "titulo" in data and es_vacio(data.get("titulo")):
-        return jsonify({"error": "El campo 'titulo' no puede estar vacío."}), 400
+    if "title" in data and is_empty(data.get("title")):
+        return jsonify({"error": "Field 'title' can't be empty."}), 400
 
-    if "descripcion" in data and es_vacio(data.get("descripcion")):
-        return jsonify({"error": "El campo 'descripcion' no puede estar vacío."}), 400
+    if "description" in data and is_empty(data.get("description")):
+        return jsonify({"error": "Field 'description' can't be empty."}), 400
 
-    if "titulo" in data:
-        tarea["titulo"] = data["titulo"].strip()
-    if "descripcion" in data:
-        tarea["descripcion"] = data["descripcion"].strip()
-    if "estado" in data:
-        tarea["estado"] = data["estado"]
+    if "title" in data:
+        task["title"] = data["title"].strip()
+    if "description" in data:
+        task["description"] = data["description"].strip()
+    if "state" in data:
+        task["state"] = data["state"]
 
-    guardar_tareas(tareas)
+    save_tasks(tasks)
 
-    return jsonify({"data": tarea}), 200
+    return jsonify({"data": task}), 200

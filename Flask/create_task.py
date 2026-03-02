@@ -1,34 +1,34 @@
 from flask import request, jsonify
-from utils import leer_tareas, es_vacio, ESTADOS_VALIDOS, guardar_tareas
+from utils import read_task, is_empty, VALID_STATES, save_tasks
 
 
-def crear_tarea():
-    tareas = leer_tareas()
+def create_task():
+    tasks = read_task()
     data = request.get_json(silent=True) or {}
 
     if "id" not in data:
-        return jsonify({"error": "Falta el campo 'id'."}), 400
-    if es_vacio(data.get("titulo")):
-        return jsonify({"error": "Falta el campo 'titulo' o esta vacio"}), 400
-    if es_vacio(data.get("descripcion")):
-        return jsonify({"error": "Falta el campo 'descripcion' o esta vacio"}), 400
-    if es_vacio(data.get("estado")):
-        return jsonify({"error": "Falta el campo 'estado' o esta vacio"}), 400
+        return jsonify({"error": "Field missed 'id'."}), 400
+    if is_empty(data.get("title")):
+        return jsonify({"error": "Field missed 'title' or is empty"}), 400
+    if is_empty(data.get("description")):
+        return jsonify({"error": "Field missed 'description' or is empty"}), 400
+    if is_empty(data.get("state")):
+        return jsonify({"error": "Field missed 'state' or is empty"}), 400
     
-    if data["estado"] not in ESTADOS_VALIDOS:
-        return jsonify({"error": "Estado invalido"}), 400
+    if data["state"] not in VALID_STATES:
+        return jsonify({"error": "Invalid state"}), 400
     
-    if any(t.get("id") == data["id"] for t in tareas):
-        return jsonify({"error": "Ya existe una tarea con ese id."}), 409 
+    if any(t.get("id") == data["id"] for t in tasks):
+        return jsonify({"error": "Already exists a task with this id."}), 409 
 
-    nueva = {
+    new = {
         "id": data["id"],
-        "titulo": data["titulo"].strip(),
-        "descripcion": data["descripcion"].strip(),
-        "estado": data["estado"],
+        "title": data["title"].strip(),
+        "description": data["description"].strip(),
+        "state": data["state"],
     }
 
-    tareas.append(nueva)
-    guardar_tareas(tareas)
+    tasks.append(new)
+    save_tasks(tasks)
 
-    return jsonify({"data": nueva}), 201
+    return jsonify({"data": new}), 201

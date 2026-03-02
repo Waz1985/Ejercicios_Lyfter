@@ -12,19 +12,19 @@ def root():
     return "<h1>Hello, World!</h1>"
 
 @app.route("/tasks", methods=["GET"])
-def obtener_tasks():
+def get_tasks():
     return get_task()
 
 @app.route("/tasks", methods=["POST"])
-def agregar_tasks():
+def add_tasks():
     return create_task()
     
 @app.route("/tasks/<int:task_id>", methods=["PUT"])
-def modificar_tasks(task_id):
+def update_tasks(task_id):
     return update_task(task_id)
 
 @app.route("/tasks/<int:task_id>", methods=["DELETE"])
-def borrar_tasks(task_id):
+def delete_tasks(task_id):
     return delete_task(task_id)
 
 if __name__ == "__main__":
