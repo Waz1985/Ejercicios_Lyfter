@@ -1,9 +1,9 @@
 import json
 from flask import Flask
-from crear_tareas import crear_tarea
-from get_tareas import get_tarea
-from editar_tareas import editar_tarea
-from eliminar_tareas import eliminar_tarea
+from Flask.create_task import create_task
+from get_tasks import get_task
+from update_tasks import update_task
+from delete_tasks import delete_task
 
 app = Flask(__name__)
 
@@ -11,21 +11,21 @@ app = Flask(__name__)
 def root():
     return "<h1>Hello, World!</h1>"
 
-@app.route("/tareas", methods=["GET"])
-def obtener_tareas():
-    return get_tarea()
+@app.route("/tasks", methods=["GET"])
+def obtener_tasks():
+    return get_task()
 
-@app.route("/tareas", methods=["POST"])
-def agregar_tareas():
-    return crear_tarea()
+@app.route("/tasks", methods=["POST"])
+def agregar_tasks():
+    return create_task()
     
-@app.route("/tareas/<int:tarea_id>", methods=["PUT"])
-def modificar_tareas(tarea_id):
-    return editar_tarea(tarea_id)
+@app.route("/tasks/<int:task_id>", methods=["PUT"])
+def modificar_tasks(task_id):
+    return update_task(task_id)
 
-@app.route("/tareas/<int:tarea_id>", methods=["DELETE"])
-def borrar_tareas(tarea_id):
-    return eliminar_tarea(tarea_id)
+@app.route("/tasks/<int:task_id>", methods=["DELETE"])
+def borrar_tasks(task_id):
+    return delete_task(task_id)
 
 if __name__ == "__main__":
     app.run(host="localhost", debug=True)

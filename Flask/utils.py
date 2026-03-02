@@ -1,15 +1,15 @@
 import json
 
 FILE_PATH = "tasks_list.json"
-ESTADOS_VALIDOS = { "Por Hacer", "En Progreso", "Completada" }
+VALID_STATES = { "To Do", "In Progress", "Completed" }
 
-def leer_tareas():
+def read_tasks():
     with open(FILE_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
     
-def guardar_tareas(tareas):
+def save_tasks(tasks):
     with open(FILE_PATH, "w", encoding="utf-8") as f:
-        json.dump(tareas, f, ensure_ascii=False, indent=4)
+        json.dump(tasks, f, ensure_ascii=False, indent=4)
 
-def es_vacio(valor):
+def is_empty(valor):
     return valor is None or (isinstance(valor, str) and valor.strip() == "")

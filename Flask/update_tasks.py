@@ -1,7 +1,7 @@
 from flask import request, jsonify
-from utils import leer_tareas, es_vacio, ESTADOS_VALIDOS, guardar_tareas 
+from utils import leer_tareas, es_vacio, VALID_STATES, guardar_tareas 
 
-def editar_tarea(tarea_id):
+def update_task(tarea_id):
     tareas = leer_tareas()
     data = request.get_json(silent=True) or {}
 
@@ -15,7 +15,7 @@ def editar_tarea(tarea_id):
     if "estado" in data:
         if es_vacio(data.get("estado")):
             return jsonify({"error": "El campo 'estado' no puede estar vacío."}), 400
-        if data["estado"] not in ESTADOS_VALIDOS:
+        if data["estado"] not in VALID_STATES:
             return jsonify({"error": "Estado inválido."}), 400
 
     if "titulo" in data and es_vacio(data.get("titulo")):
