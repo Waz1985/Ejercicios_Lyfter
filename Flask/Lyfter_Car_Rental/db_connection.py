@@ -1,0 +1,172 @@
+import psycopg2
+
+
+connection = psycopg2.connect(
+    host="localhost",
+    port=5432,
+    user="postgres",
+    password="admin",
+    dbname="lyfter_db",
+)
+print("Connected to database!")
+
+cursor = connection.cursor()
+
+cursor.execute("CREATE SCHEMA IF NOT EXISTS lyfter_car_rental;")
+print("Schema created")
+connection.commit()
+
+creationQuery = """
+CREATE TABLE IF NOT EXISTS lyfter_car_rental.users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    birthday DATE NOT NULL,
+    status VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS lyfter_car_rental.cars (
+    car_id SERIAL PRIMARY KEY,
+    brand VARCHAR(100) NOT NULL,
+    model VARCHAR(100) NOT NULL,
+    year INTEGER NOT NULL,
+    status VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS lyfter_car_rental.rentals (
+    rental_id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    car_id INTEGER NOT NULL,
+    rental_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    return_date TIMESTAMP,
+    status VARCHAR(20) NOT NULL,
+
+    FOREIGN KEY(user_id)
+        REFERENCES lyfter_car_rental.users(user_id),
+    
+    FOREIGN KEY(car_id)
+        REFERENCES lyfter_car_rental.cars(car_id)
+);
+"""
+cursor.execute(creationQuery)
+print("Tables Created")
+connection.commit()
+
+populationQuery = """
+INSERT INTO lyfter_car_rental.users
+(name, email, username, password, birthday, status)
+VALUES
+('Ana Soto','ana1@test.com','anasoto1','123','1995-04-12','ACTIVE'),
+('Carlos Mendez','carlos2@test.com','cmendez2','123','1990-07-21','ACTIVE'),
+('Laura Jimenez','laura3@test.com','ljimenez3','123','1993-01-10','ACTIVE'),
+('Mario Vargas','mario4@test.com','mvargas4','123','1988-09-05','INACTIVE'),
+('Sofia Rojas','sofia5@test.com','srojas5','123','1996-11-23','ACTIVE'),
+('Daniel Castro','daniel6@test.com','dcastro6','123','1987-02-18','ACTIVE'),
+('Valeria Ruiz','valeria7@test.com','vruiz7','123','1994-06-30','ACTIVE'),
+('Jose Perez','jose8@test.com','jperez8','123','1985-08-14','SUSPENDED'),
+('Andrea Lopez','andrea9@test.com','alopez9','123','1997-12-01','ACTIVE'),
+('Luis Mora','luis10@test.com','lmora10','123','1991-05-19','ACTIVE'),
+('Paula Arias','paula11@test.com','parias11','123','1998-03-25','ACTIVE'),
+('Esteban Solis','esteban12@test.com','esolis12','123','1989-10-11','ACTIVE'),
+('Gabriela Cruz','gabriela13@test.com','gcruz13','123','1992-04-04','ACTIVE'),
+('Ricardo Vega','ricardo14@test.com','rvega14','123','1986-07-09','ACTIVE'),
+('Fernanda Herrera','fernanda15@test.com','fherrera15','123','1999-02-17','ACTIVE'),
+('Kevin Morales','kevin16@test.com','kmorales16','123','1993-09-29','ACTIVE'),
+('Melissa Campos','melissa17@test.com','mcampos17','123','1990-01-15','ACTIVE'),
+('Andres Salas','andres18@test.com','asalas18','123','1984-11-27','INACTIVE'),
+('Diana Navarro','diana19@test.com','dnavarro19','123','1996-06-12','ACTIVE'),
+('Jorge Castillo','jorge20@test.com','jcastillo20','123','1987-12-03','ACTIVE'),
+('Camila Blanco','camila21@test.com','cblanco21','123','1995-07-08','ACTIVE'),
+('Hector Leon','hector22@test.com','hleon22','123','1991-03-19','ACTIVE'),
+('Monica Ramirez','monica23@test.com','mramirez23','123','1994-09-14','ACTIVE'),
+('Oscar Delgado','oscar24@test.com','odelgado24','123','1988-02-22','ACTIVE'),
+('Natalia Pineda','natalia25@test.com','npineda25','123','1997-05-30','ACTIVE'),
+('Alonso Vargas','alonso26@test.com','avargas26','123','1985-08-18','ACTIVE'),
+('Lucia Romero','lucia27@test.com','lromero27','123','1992-10-05','ACTIVE'),
+('Sebastian Rojas','sebastian28@test.com','srojas28','123','1993-11-16','ACTIVE'),
+('Karina Chaves','karina29@test.com','kchaves29','123','1996-04-21','ACTIVE'),
+('Mauricio Ortega','mauricio30@test.com','mortega30','123','1990-06-07','ACTIVE'),
+('Adriana Torres','adriana31@test.com','atorres31','123','1995-01-01','ACTIVE'),
+('Brayan Cordero','brayan32@test.com','bcordero32','123','1991-02-02','ACTIVE'),
+('Daniela Soto','daniela33@test.com','dsoto33','123','1998-03-03','ACTIVE'),
+('Eduardo Herrera','eduardo34@test.com','eherrera34','123','1987-04-04','ACTIVE'),
+('Fabian Mora','fabian35@test.com','fmora35','123','1989-05-05','ACTIVE'),
+('Gloria Campos','gloria36@test.com','gcampos36','123','1992-06-06','ACTIVE'),
+('Henry Solano','henry37@test.com','hsolano37','123','1994-07-07','ACTIVE'),
+('Isabel Vargas','isabel38@test.com','ivargas38','123','1993-08-08','ACTIVE'),
+('Javier Salazar','javier39@test.com','jsalazar39','123','1990-09-09','ACTIVE'),
+('Karen Molina','karen40@test.com','kmolina40','123','1996-10-10','ACTIVE'),
+('Leonardo Porras','leo41@test.com','lporras41','123','1991-11-11','ACTIVE'),
+('Mariana Rojas','mariana42@test.com','mrojas42','123','1995-12-12','ACTIVE'),
+('Nicolas Perez','nico43@test.com','nperez43','123','1988-01-13','ACTIVE'),
+('Olga Jimenez','olga44@test.com','ojimenez44','123','1997-02-14','ACTIVE'),
+('Pedro Sanchez','pedro45@test.com','psanchez45','123','1993-03-15','ACTIVE'),
+('Raquel Vargas','raquel46@test.com','rvargas46','123','1994-04-16','ACTIVE'),
+('Samuel Ortiz','samuel47@test.com','sortiz47','123','1992-05-17','ACTIVE'),
+('Tatiana Cruz','tatiana48@test.com','tcruz48','123','1996-06-18','ACTIVE'),
+('Uriel Solis','uriel49@test.com','usolis49','123','1989-07-19','ACTIVE'),
+('Vanessa Mena','vanessa50@test.com','vmena50','123','1998-08-20','ACTIVE');
+
+INSERT INTO lyfter_car_rental.cars
+(brand, model, year, status)
+VALUES
+('Toyota','Corolla',2022,'AVAILABLE'),
+('Toyota','Yaris',2021,'AVAILABLE'),
+('Toyota','Rav4',2023,'AVAILABLE'),
+('Honda','Civic',2022,'AVAILABLE'),
+('Honda','CRV',2023,'AVAILABLE'),
+('Nissan','Sentra',2021,'AVAILABLE'),
+('Nissan','Versa',2022,'AVAILABLE'),
+('Hyundai','Elantra',2020,'AVAILABLE'),
+('Hyundai','Tucson',2023,'AVAILABLE'),
+('Kia','Rio',2021,'AVAILABLE'),
+('Kia','Sportage',2022,'AVAILABLE'),
+('Ford','Escape',2023,'AVAILABLE'),
+('Ford','Focus',2020,'AVAILABLE'),
+('Chevrolet','Spark',2022,'AVAILABLE'),
+('Chevrolet','Tracker',2023,'AVAILABLE'),
+('Mazda','CX5',2022,'AVAILABLE'),
+('Mazda','3',2021,'AVAILABLE'),
+('Volkswagen','Jetta',2023,'AVAILABLE'),
+('Volkswagen','Tiguan',2022,'AVAILABLE'),
+('BMW','X1',2023,'AVAILABLE'),
+('BMW','X3',2022,'AVAILABLE'),
+('Mercedes','GLA',2023,'AVAILABLE'),
+('Mercedes','C200',2022,'AVAILABLE'),
+('Audi','A3',2021,'AVAILABLE'),
+('Audi','Q5',2023,'AVAILABLE'),
+('Suzuki','Swift',2022,'AVAILABLE'),
+('Suzuki','Vitara',2023,'AVAILABLE'),
+('Subaru','Forester',2022,'AVAILABLE'),
+('Subaru','XV',2021,'AVAILABLE'),
+('Jeep','Compass',2023,'AVAILABLE'),
+('Jeep','Renegade',2022,'AVAILABLE'),
+('Mitsubishi','Outlander',2023,'AVAILABLE'),
+('Mitsubishi','Lancer',2020,'AVAILABLE'),
+('Peugeot','208',2021,'AVAILABLE'),
+('Peugeot','3008',2023,'AVAILABLE'),
+('Renault','Duster',2022,'AVAILABLE'),
+('Renault','Clio',2021,'AVAILABLE'),
+('Volvo','XC40',2023,'AVAILABLE'),
+('Volvo','XC60',2022,'AVAILABLE'),
+('Tesla','Model 3',2023,'AVAILABLE'),
+('Tesla','Model Y',2023,'AVAILABLE'),
+('Toyota','Hilux',2022,'AVAILABLE'),
+('Isuzu','DMax',2021,'AVAILABLE'),
+('RAM','1500',2023,'AVAILABLE'),
+('Chevrolet','Colorado',2022,'AVAILABLE'),
+('Ford','Ranger',2023,'AVAILABLE'),
+('Hyundai','Accent',2020,'AVAILABLE'),
+('Kia','Seltos',2022,'AVAILABLE'),
+('Honda','HRV',2023,'AVAILABLE'),
+('Nissan','XTrail',2022,'AVAILABLE');
+"""
+cursor.execute(populationQuery)
+print("Population Done")
+connection.commit()
+
+results = cursor.fetchall()
+print(results)
+
