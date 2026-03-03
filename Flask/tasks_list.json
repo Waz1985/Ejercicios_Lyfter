@@ -1,68 +1,68 @@
 [
     {
         "id": 1,
-        "titulo": "Configurar entorno Flask",
-        "descripcion": "Crear entorno virtual e instalar Flask y dependencias necesarias.",
-        "estado": "Completada"
+        "title": "Configure Flask environment",
+        "description": "Create a virtual environment and install Flask and the required dependencies.",
+        "state": "Completed"
     },
     {
         "id": 2,
-        "titulo": "Diseñar modelo de tareas",
-        "descripcion": "Definir estructura de datos para representar una tarea.",
-        "estado": "Completada"
+        "title": "Design tasks model",
+        "description": "Define the data structure to represent a task.",
+        "state": "Completed"
     },
     {
         "id": 3,
-        "titulo": "Crear endpoint GET /tasks",
-        "descripcion": "Implementar endpoint para obtener la lista completa de tareas.",
-        "estado": "En Progreso"
+        "title": "Create GET /tasks endpoint",
+        "description": "Implement an endpoint to retrieve the full list of tasks.",
+        "state": "In Progress"
     },
     {
         "id": 4,
-        "titulo": "Crear endpoint POST /tasks (actualizado)",
-        "descripcion": "Permitir la creación de nuevas tareas mediante JSON.",
-        "estado": "En Progreso"
+        "title": "Create POST /tasks endpoint (updated)",
+        "description": "Allow the creation of new tasks using JSON.",
+        "state": "In Progress"
     },
     {
         "id": 5,
-        "titulo": "Validar datos de entrada",
-        "descripcion": "Validar que título y estado sean obligatorios.",
-        "estado": "Por Hacer"
+        "title": "Validate input data",
+        "description": "Ensure that title and state are required fields.",
+        "state": "To Do"
     },
     {
         "id": 6,
-        "titulo": "Implementar filtrado por estado",
-        "descripcion": "Permitir consultar tareas por estado usando query params.",
-        "estado": "En Progreso"
+        "title": "Implement filtering by state",
+        "description": "Allow querying tasks by state using query parameters.",
+        "state": "In Progress"
     },
     {
         "id": 7,
-        "titulo": "Conectar con base de datos",
-        "descripcion": "Integrar MySQL para persistencia de tareas.",
-        "estado": "Por Hacer"
+        "title": "Connect to database",
+        "description": "Integrate MySQL for task persistence.",
+        "state": "To Do"
     },
     {
         "id": 8,
-        "titulo": "Implementar PUT /tasks/<id>",
-        "descripcion": "Permitir actualizar una tarea existente.",
-        "estado": "Por Hacer"
+        "title": "Implement PUT /tasks/<id>",
+        "description": "Allow updating an existing task.",
+        "state": "To Do"
     },
     {
         "id": 9,
-        "titulo": "Implementar DELETE /tasks/<id>",
-        "descripcion": "Permitir eliminar una tarea.",
-        "estado": "Por Hacer"
+        "title": "Implement DELETE /tasks/<id>",
+        "description": "Allow deleting a task.",
+        "state": "To Do"
     },
     {
         "id": 10,
-        "titulo": "Escribir pruebas unitarias",
-        "descripcion": "Crear pruebas usando pytest para los endpoints.",
-        "estado": "Por Hacer"
+        "title": "Write unit tests",
+        "description": "Create tests using pytest for the endpoints.",
+        "state": "To Do"
     },
     {
         "id": 11,
-        "titulo": "Comprar leche",
-        "descripcion": "Ir al súper y comprar leche deslactosada",
-        "estado": "Por Hacer"
+        "title": "Buy milk",
+        "description": "Go to the supermarket and buy lactose-free milk.",
+        "state": "To Do"
     }
 ]
