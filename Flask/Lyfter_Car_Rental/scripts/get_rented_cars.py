@@ -4,8 +4,7 @@ connection = connect_db()
 cursor = connection.cursor()
 
 cursor.execute("""
-UPDATE lyfter_car_rental.users 
-SET status = 'ACTIVE'
-WHERE user_id = 9;
+SELECT * FROM lyfter_car_rental.cars
+WHERE status = 'RENTED';
 """)
 connection.commit()

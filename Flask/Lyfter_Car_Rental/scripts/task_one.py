@@ -1,4 +1,4 @@
-from db_connection import connect_db
+from Flask.Lyfter_Car_Rental.db_connection import connect_db
 
 connection = connect_db()
 cursor = connection.cursor()
