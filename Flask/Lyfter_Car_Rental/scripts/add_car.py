@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from db_connection import connect_db
+from db.add_car_db import add_car_db
 
 
 def add_car():
@@ -18,42 +18,18 @@ def add_car():
     if data["status"] not in allowed_status:
         return jsonify({"error": "Invalid status"}), 400
 
-    
-    connection = connect_db()
-    cursor = connection.cursor()
-
     try:
-        query = ("""
-        INSERT INTO lyfter_car_rental.cars
-        (brand, model, year, status)
-        VALUES (%s, %s, %s, %s)
-        RETURNING car_id, brand, model, year, status;
-        """)
-
-        cursor.execute(query, (
+        new_car = add_car_db (
             data["brand"],
             data["model"],
             data["year"],
             data["status"]
-        ))
+        )
 
-        new_car = cursor.fetchone()
-        connection.commit()
-        
         return jsonify({
-        "message": "Car created successfully",
-        "data": {
-            "car_id": new_car[0],
-            "brand": new_car[1],
-            "model": new_car[2],
-            "year": new_car[3],
-            "status": new_car[4]
-            }
+            "message": "Car created successfully",
+            "data": new_car
         }), 201
+
     except Exception as e:
-        connection.rollback()
         return jsonify({"error": str(e)}), 500
-    
-    finally:
-        cursor.close()
-        connection.close()

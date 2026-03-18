@@ -1,15 +1,7 @@
-from db_connection import connect_db
+from flask import jsonify
+from db.get_available_cars_db import get_available_cars_db
 
-connection = connect_db()
-cursor = connection.cursor()
 
-cursor.execute("""
-SELECT * FROM lyfter_car_rental.cars
-WHERE status = 'AVAILABLE';
-""")
-
-rows = cursor.fetchall()
-
-for row in rows:
-    print(f"Car ID: {row[0]}, Brand: {row[1]}, Model: {row[2]}, Status: {row[4]}")
-connection.commit()
+def get_available_cars():
+    cars = get_available_cars_db()
+    return jsonify(cars), 200

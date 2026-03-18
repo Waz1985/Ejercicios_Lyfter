@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from db_connection import connect_db
+from db.add_user_db import add_user_db
 
 
 def add_user():
@@ -18,45 +18,20 @@ def add_user():
     if data["status"] not in allowed_status:
         return jsonify({"error": "Invalid status"}), 400
 
-    
-    connection = connect_db()
-    cursor = connection.cursor()
-
     try:
-        query = ("""
-        INSERT INTO lyfter_car_rental.users
-        (name, email, username, password, birthday, status)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        RETURNING user_id, name, email, username, birthday, status;
-        """)
-
-        cursor.execute(query, (
+        new_user = add_user_db (
             data["name"],
             data["email"],
             data["username"],
             data["password"],
             data["birthday"],
             data["status"]
-        ))
+        )
 
-        new_user = cursor.fetchone()
-        connection.commit()
-        
         return jsonify({
         "message": "User created successfully",
-        "data": {
-            "user_id": new_user[0],
-            "name": new_user[1],
-            "email": new_user[2],
-            "username": new_user[3],
-            "birthday": new_user[4],
-            "status": new_user[5]
-            }
+        "data": new_user
         }), 201
-    except Exception as e:
-        connection.rollback()
-        return jsonify({"error": str(e)}), 500
     
-    finally:
-        cursor.close()
-        connection.close()
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

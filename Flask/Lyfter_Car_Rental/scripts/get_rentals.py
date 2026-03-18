@@ -1,42 +1,13 @@
-from flask import request
-from db_connection import connect_db
+from flask import request, jsonify
+from db.get_rentals_db import get_rentals_db
 
-def get_rentals():
-    connection = connect_db()
-    cursor = connection.cursor()
 
-    base_query = "SELECT * FROM lyfter_car_rental.rentals"
-    conditions = []
-    values = []
-    allowed_filters = [
-        "rental_id",
-        "user_id",
-        "car_id",
-        "rental_date",
-        "return_date",
-        "status"
-    ]
+def get_rentals(rentals):
+    filters = request.args.to_dict()
 
-    for key, value in request.args.items():
-        if key in allowed_filters:
-            conditions.append(f"{key} = %s")
-            values.append(value)
-    if conditions:
-        base_query += " WHERE " + " AND ".join(conditions)
-        
-    cursor.execute(base_query, values)
+    try:
+        rentals = get_rentals_db(filters)
+        return jsonify(rentals), 200
 
-    rows = cursor.fetchall()
-    rentals = []
-
-    for row in rows:
-        rentals.append({
-        "Rental ID": row[0], 
-        "User ID": row[1], 
-        "Car ID": row[2], 
-        "Rental Date": row[3], 
-        "Return Date": row[4],
-        "Status": row[5]
-        })
-
-    return rentals
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
