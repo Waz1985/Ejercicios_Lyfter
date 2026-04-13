@@ -3,3 +3,4 @@ sqlalchemy
 psycopg[binary]
 PyJWT
 cryptography
+redis

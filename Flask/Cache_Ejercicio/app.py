@@ -2,6 +2,13 @@ from decimal import Decimal
 from datetime import datetime
 
 from flask import Flask, request, jsonify, g
+from cache import (
+    get_cache,
+    set_cache,
+    delete_cache,
+    product_cache_key,
+    products_list_cache_key
+)
 
 from db import SessionLocal
 from jwt_manager import JWTManager
@@ -170,6 +177,11 @@ def create_product():
         session.commit()
         session.refresh(product)
 
+        try:
+            delete_cache(products_list_cache_key())
+        except Exception:
+            pass
+
         return jsonify({
             "message": "Product created successfully",
             "data": {
@@ -192,11 +204,26 @@ def create_product():
 @require_auth
 @require_role("ADMIN")
 def get_products():
+    list_key = products_list_cache_key()
+
+    try:
+        cached_products = get_cache(list_key)
+        print("GET CACHE products:all ->", cached_products)
+
+        if cached_products is not None:
+            print("RETURNING /products FROM CACHE")
+            return jsonify({
+                "source": "cache",
+                "data": cached_products
+            }), 200
+    except Exception as e:
+        print("GET CACHE ERROR /products:", e)
+
     session = SessionLocal()
     try:
         products = session.query(Product).all()
 
-        return jsonify([
+        response_data = [
             {
                 "id": product.id,
                 "name": product.name,
@@ -205,7 +232,18 @@ def get_products():
                 "quantity": product.quantity
             }
             for product in products
-        ]), 200
+        ]
+
+        try:
+            set_cache(list_key, response_data)
+            print("SET CACHE products:all OK")
+        except Exception as e:
+            print("SET CACHE ERROR /products:", e)
+
+        return jsonify({
+            "source": "database",
+            "data": response_data
+        }), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -217,6 +255,21 @@ def get_products():
 @require_auth
 @require_role("ADMIN")
 def get_product_by_id(product_id):
+    cache_key = product_cache_key(product_id)
+
+    try:
+        cached_product = get_cache(cache_key)
+        print(f"GET CACHE {cache_key} ->", cached_product)
+
+        if cached_product is not None:
+            print(f"RETURNING /products/{product_id} FROM CACHE")
+            return jsonify({
+                "source": "cache",
+                "data": cached_product
+            }), 200
+    except Exception as e:
+        print(f"GET CACHE ERROR /products/{product_id}:", e)
+
     session = SessionLocal()
     try:
         product = session.get(Product, product_id)
@@ -224,12 +277,23 @@ def get_product_by_id(product_id):
         if not product:
             return jsonify({"error": "Product not found"}), 404
 
-        return jsonify({
+        response_data = {
             "id": product.id,
             "name": product.name,
             "price": str(product.price),
             "entry_date": str(product.entry_date),
             "quantity": product.quantity
+        }
+
+        try:
+            set_cache(cache_key, response_data)
+            print(f"SET CACHE {cache_key} OK")
+        except Exception as e:
+            print(f"SET CACHE ERROR /products/{product_id}:", e)
+
+        return jsonify({
+            "source": "database",
+            "data": response_data
         }), 200
 
     except Exception as e:
@@ -272,6 +336,12 @@ def update_product(product_id):
         session.commit()
         session.refresh(product)
 
+        try:
+            delete_cache(product_cache_key(product_id))
+            delete_cache(products_list_cache_key())
+        except Exception:
+            pass
+
         return jsonify({
             "message": "Product updated successfully",
             "data": {
@@ -303,6 +373,12 @@ def delete_product(product_id):
 
         session.delete(product)
         session.commit()
+
+        try:
+            delete_cache(product_cache_key(product_id))
+            delete_cache(products_list_cache_key())
+        except Exception:
+            pass
 
         return jsonify({"message": "Product deleted successfully"}), 200
 
