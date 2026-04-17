@@ -15,6 +15,3 @@ class InvoiceItem(Base):
 
     invoice = relationship("Invoice", back_populates="items")
     product = relationship("Product", back_populates="invoice_items")
-
-    def __repr__(self):
-        return f"InvoiceItem(id={self.id}, invoice_id={self.invoice_id}, product_id={self.product_id})"

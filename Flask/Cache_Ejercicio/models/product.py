@@ -13,6 +13,3 @@ class Product(Base):
     quantity = Column(Integer, nullable=False)
 
     invoice_items = relationship("InvoiceItem", back_populates="product")
-
-    def __repr__(self):
-        return f"Product(id={self.id}, name='{self.name}', price={self.price}, quantity={self.quantity})"

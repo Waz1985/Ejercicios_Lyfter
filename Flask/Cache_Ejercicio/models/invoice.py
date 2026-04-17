@@ -14,6 +14,3 @@ class Invoice(Base):
 
     user = relationship("User", back_populates="invoices")
     items = relationship("InvoiceItem", back_populates="invoice", cascade="all, delete-orphan")
-
-    def __repr__(self):
-        return f"Invoice(id={self.id}, user_id={self.user_id}, total={self.total})"

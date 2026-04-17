@@ -12,6 +12,3 @@ class User(Base):
     role = Column(String(20), nullable=False, default="USER")
 
     invoices = relationship("Invoice", back_populates="user", cascade="all, delete-orphan")
-
-    def __repr__(self):
-        return f"User(id={self.id}, username='{self.username}', role='{self.role}')"
