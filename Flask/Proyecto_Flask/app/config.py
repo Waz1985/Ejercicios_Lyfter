@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 from dotenv import load_dotenv
 
@@ -8,6 +9,7 @@ load_dotenv()
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me")
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "jwt-secret-change-me")
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=2)
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL", "postgresql+psycopg://postgres:postgres@localhost:5433/petshop"
     )
@@ -23,3 +25,4 @@ class TestingConfig(Config):
     CACHE_TYPE = "SimpleCache"
     JWT_SECRET_KEY = "test-jwt-secret-with-at-least-32-bytes"
     SECRET_KEY = "test-secret-with-at-least-32-bytes"
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=5)
