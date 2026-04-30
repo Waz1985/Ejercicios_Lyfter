@@ -50,8 +50,13 @@ def get_product(product_id):
     key = PRODUCT_DETAIL_KEY.format(product_id=product_id)
     cached = cache.get(key)
     if cached is not None:
+        # A product may have been deactivated after it was cached;
+        # treat is_active=False the same as a missing record.
+        if not cached.get("is_active", True):
+            return jsonify({"error": "Resource not found"}), 404
         return jsonify(cached)
-    product = Product.query.get_or_404(product_id)
+
+    product = Product.query.filter_by(id=product_id, is_active=True).first_or_404()
     payload = product.to_dict()
     cache.set(key, payload, timeout=300)
     return jsonify(payload)
